@@ -10,7 +10,10 @@ export const VID_RE = /^[\w-]{11}$/;
 let dbPromise;
 export function db() {
   dbPromise ??= (async () => {
-    const client = await new MongoClient(process.env.MONGODB_URI).connect();
+    // password kept out of the URI so it can be pasted as-is, special characters included
+    const { MONGODB_URI, MONGODB_USER, MONGODB_PASSWORD } = process.env;
+    const client = await new MongoClient(MONGODB_URI,
+      MONGODB_PASSWORD ? { auth: { username: MONGODB_USER, password: MONGODB_PASSWORD } } : {}).connect();
     const d = client.db(process.env.MONGODB_DB || "mathtube");
     await Promise.all([
       d.collection("videos").createIndex({ vid: 1 }, { unique: true }),
@@ -25,7 +28,10 @@ export function db() {
 }
 
 // ---------- session cookie: base64url(json).hmac ----------
-const sign = (s) => crypto.createHmac("sha256", process.env.SESSION_SECRET).update(s).digest("base64url");
+// SESSION_SECRET is optional: by default the key is derived from the GitHub client secret
+const sessionKey = () => process.env.SESSION_SECRET ||
+  crypto.createHash("sha256").update("mathtube-session:" + process.env.GITHUB_CLIENT_SECRET).digest();
+const sign = (s) => crypto.createHmac("sha256", sessionKey()).update(s).digest("base64url");
 
 export function makeSession(user) {
   const body = Buffer.from(JSON.stringify({ ...user, exp: Date.now() + 30 * 864e5 })).toString("base64url");

@@ -26,3 +26,14 @@ test("sessions round-trip and reject tampering", () => {
   assert.equal(readSession(`${body}.x${mac.slice(1)}`), null);
   assert.equal(readSession("garbage"), null);
 });
+
+test("without SESSION_SECRET the key comes from the GitHub secret", () => {
+  const saved = process.env.SESSION_SECRET;
+  delete process.env.SESSION_SECRET;
+  process.env.GITHUB_CLIENT_SECRET = "gh-secret";
+  const tok = makeSession({ id: "1", login: "ada" });
+  assert.equal(readSession(tok).login, "ada");
+  process.env.GITHUB_CLIENT_SECRET = "other";
+  assert.equal(readSession(tok), null, "changing the GitHub secret logs everyone out");
+  process.env.SESSION_SECRET = saved;
+});

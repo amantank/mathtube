@@ -25,11 +25,12 @@ If the API is unreachable, the curated site still works on its own.
 
 1. `npm install`
 2. Copy `.env.example` to `.env` and fill it in:
-   - `MONGODB_URI` from MongoDB Atlas (free M0 cluster; Network Access must allow `0.0.0.0/0` for Vercel)
+   - `MONGODB_URI` (no password in it), `MONGODB_USER`, `MONGODB_PASSWORD` from MongoDB Atlas
+     (free M0 cluster; Network Access must allow `0.0.0.0/0` for Vercel)
    - `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET` from a GitHub OAuth App
      (github.com/settings/developers, callback URL `https://<your-domain>/api/auth/callback`;
      a second app with `http://localhost:3000/api/auth/callback` for local dev)
-   - `SESSION_SECRET`: any long random string
+   - `SESSION_SECRET` (optional): signs login cookies; derived from `GITHUB_CLIENT_SECRET` when empty
 3. `npm run dev` (runs `vercel dev`, needs `npx vercel login` once) and open http://localhost:3000
 
 ## Test
