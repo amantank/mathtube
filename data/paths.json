@@ -1,0 +1,44 @@
+[
+  {
+    "id": "first-taste",
+    "title": "Fall in love with math",
+    "blurb": "No formulas required. A tour of what math actually is, and why people get hooked.",
+    "vids": ["OmJ-4B-mS-Y", "5TkIe60y2GI", "elvOZm0d4H0", "sj8Sg8qnjOg", "CaasbfdJdJg", "qhbuKbxJsk8", "XFDM1ip5HdU"]
+  },
+  {
+    "id": "linear-algebra",
+    "title": "Linear algebra, visually",
+    "blurb": "Vectors, matrices and eigenvectors as pictures first, then the classic MIT lecture.",
+    "vids": ["kjBOesZCoqc", "fNk_zzaMoSs", "Ip3X9LOh2dk", "PFDu9oVAE-g", "ZK3O402wf1c"]
+  },
+  {
+    "id": "calculus",
+    "title": "Calculus from scratch",
+    "blurb": "What derivatives and integrals really mean, ending at the most famous formula in math.",
+    "vids": ["WUvTyaaNkzM", "MFRWDuduuSw", "v0YEaeIClKY", "ZxYOEwM6Wbk"]
+  },
+  {
+    "id": "complex-fourier",
+    "title": "Imaginary numbers to Fourier",
+    "blurb": "Why imaginary numbers are real, and how they let you split any signal into circles.",
+    "vids": ["T647CGsuOVU", "cUzklzVXJwo", "r6sGWTCMz2k", "spUNpyF58BY", "h7apO7q16V0"]
+  },
+  {
+    "id": "probability",
+    "title": "Probability and thinking clearly",
+    "blurb": "Counting, Bayes' rule and the surprising ways chance fools us.",
+    "vids": ["KbB0FjPg0mw", "HZGCoVF3YvM", "lG4VkPoG3ko", "BrK7X_XlGB8", "KZeIEiBrT_w", "mScpHTIi-kM"]
+  },
+  {
+    "id": "proofs-computation",
+    "title": "Proofs, logic and computation",
+    "blurb": "How mathematicians prove things, where proof hits its limits, and what computers can never do.",
+    "vids": ["L3LMbpZIKhQ", "HeQX2HjkcNo", "macM_MtS_w4", "6OPsH8PK7xM", "YX40hbAHx3s", "9syvZr-9xwk"]
+  },
+  {
+    "id": "math-in-tech",
+    "title": "The math inside your computer",
+    "blurb": "Error correction, image compression, Wordle and neural networks, all explained by their math.",
+    "vids": ["X8jsijhllIA", "Q2aEzeMDHMA", "v68zYyaEmEA", "aircAruvnKk", "tIeHLnjs5U8"]
+  }
+]

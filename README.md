@@ -12,6 +12,9 @@ It starts from the math videos Hacker News keeps recommending (from [HackerTube]
 
 - `index.html` — the whole frontend, plain HTML/CSS/JS, no build step
 - `data/videos.json` — the curated videos, made by `scripts/build_data.py`
+- `data/paths.json` — the "Start here" learning paths (hand-picked video ids, in order)
+- `data/library.json` — Library websites and YouTube playlists, checked by `scripts/check_library.py`
+- `data/repos.json` — math GitHub repos, made by `scripts/build_repos.py`
 - `api/` — Vercel serverless functions (Node), data in MongoDB Atlas
   - `auth/login`, `auth/callback`, `auth/logout` — GitHub sign-in, signed session cookie
   - `me` — who is signed in and what they upvoted
@@ -20,6 +23,8 @@ It starts from the math videos Hacker News keeps recommending (from [HackerTube]
   - `playlists` — create, list, edit, delete playlists
 
 If the API is unreachable, the curated site still works on its own.
+Community features (sign-in, sharing, playlists) are switched off by `COMMUNITY = false` in `index.html`.
+Donate buttons appear once `DONATE_URL` in `index.html` is set.
 
 ## Setup
 
@@ -43,7 +48,7 @@ Runs the API flows against a throwaway in-memory MongoDB, no accounts needed.
 
 ## Deploy
 
-Vercel project linked to this repo; set the same env vars in the Vercel dashboard. Pushes to `main` deploy to production.
+Vercel project linked to this repo; set the same env vars in the Vercel dashboard. Deploy production from `main` with `npx vercel --prod` (the Vercel GitHub app is not installed, so pushes don't auto-deploy).
 
 ## Rebuild the curated data
 
@@ -51,6 +56,13 @@ Download and unzip the HackerTube dataset from https://hackertube.org/data, then
 
 ```bash
 python scripts/build_data.py path/to/hackertube-data
+```
+
+Refresh the GitHub repos (token optional, avoids rate limits) and re-check the library links:
+
+```bash
+GITHUB_TOKEN=$(gh auth token) python scripts/build_repos.py
+python scripts/check_library.py
 ```
 
 ## Credits

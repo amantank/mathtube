@@ -1,0 +1,609 @@
+{
+ "levels": [
+  "beginner",
+  "intermediate",
+  "advanced"
+ ],
+ "categories": {
+  "learn": "Courses & lessons",
+  "visual": "Visual & interactive",
+  "practice": "Practice & problems",
+  "tools": "Tools & calculators",
+  "reference": "Reference",
+  "proofs": "Proofs & formal math",
+  "books": "Free textbooks",
+  "reading": "Reading & news",
+  "community": "Ask & discuss"
+ },
+ "sites": [
+  {
+   "name": "Khan Academy",
+   "url": "https://www.khanacademy.org/math",
+   "cat": "learn",
+   "levels": [
+    "beginner",
+    "intermediate"
+   ],
+   "desc": "Free lessons and exercises from arithmetic through calculus, linear algebra and statistics."
+  },
+  {
+   "name": "Paul's Online Math Notes",
+   "url": "https://tutorial.math.lamar.edu/",
+   "cat": "learn",
+   "levels": [
+    "beginner",
+    "intermediate"
+   ],
+   "desc": "Clear, complete notes and worked examples for algebra, calculus I-III and differential equations."
+  },
+  {
+   "name": "BetterExplained",
+   "url": "https://betterexplained.com/",
+   "cat": "learn",
+   "levels": [
+    "beginner",
+    "intermediate"
+   ],
+   "desc": "Intuition-first explanations of e, logarithms, calculus, Fourier and more."
+  },
+  {
+   "name": "OpenStax Math",
+   "url": "https://openstax.org/subjects/math",
+   "cat": "books",
+   "levels": [
+    "beginner",
+    "intermediate"
+   ],
+   "desc": "Free, peer-reviewed textbooks: prealgebra to calculus and statistics."
+  },
+  {
+   "name": "MIT OpenCourseWare: Mathematics",
+   "url": "https://ocw.mit.edu/search/?d=Mathematics",
+   "cat": "learn",
+   "levels": [
+    "intermediate",
+    "advanced"
+   ],
+   "desc": "Full MIT math courses with lecture notes, problem sets, exams and many videos."
+  },
+  {
+   "name": "Brilliant",
+   "url": "https://brilliant.org/",
+   "cat": "learn",
+   "levels": [
+    "beginner",
+    "intermediate"
+   ],
+   "desc": "Interactive problem-based courses in math and logic. Partly paid.",
+   "paid": true
+  },
+  {
+   "name": "CK-12",
+   "url": "https://www.ck12.org/",
+   "cat": "learn",
+   "levels": [
+    "beginner"
+   ],
+   "desc": "Free school-level math lessons, practice and flexbooks."
+  },
+  {
+   "name": "LibreTexts Mathematics",
+   "url": "https://math.libretexts.org/",
+   "cat": "books",
+   "levels": [
+    "intermediate",
+    "advanced"
+   ],
+   "desc": "A huge free library of university math textbooks, from calculus to abstract algebra."
+  },
+  {
+   "name": "Active Calculus",
+   "url": "https://activecalculus.org/",
+   "cat": "books",
+   "levels": [
+    "beginner",
+    "intermediate"
+   ],
+   "desc": "A free, activity-driven calculus textbook."
+  },
+  {
+   "name": "Linear Algebra Done Right",
+   "url": "https://linear.axler.net/",
+   "cat": "books",
+   "levels": [
+    "intermediate",
+    "advanced"
+   ],
+   "desc": "Axler's classic proof-based linear algebra book, free to read online."
+  },
+  {
+   "name": "Book of Proof",
+   "url": "https://richardhammack.github.io/BookOfProof/",
+   "cat": "proofs",
+   "levels": [
+    "intermediate"
+   ],
+   "desc": "A free, gentle introduction to reading and writing proofs."
+  },
+  {
+   "name": "An Infinitely Large Napkin",
+   "url": "https://web.evanchen.cc/napkin.html",
+   "cat": "books",
+   "levels": [
+    "advanced"
+   ],
+   "desc": "Evan Chen's free tour of higher math: algebra, topology, analysis and more."
+  },
+  {
+   "name": "Open Textbook Library: Mathematics",
+   "url": "https://open.umn.edu/opentextbooks/subjects/mathematics",
+   "cat": "books",
+   "levels": [
+    "beginner",
+    "intermediate",
+    "advanced"
+   ],
+   "desc": "Hundreds of free, openly licensed math textbooks."
+  },
+  {
+   "name": "3Blue1Brown",
+   "url": "https://www.3blue1brown.com/",
+   "cat": "visual",
+   "levels": [
+    "beginner",
+    "intermediate"
+   ],
+   "desc": "Animated lessons with written versions: linear algebra, calculus, neural networks."
+  },
+  {
+   "name": "Seeing Theory",
+   "url": "https://seeing-theory.brown.edu/",
+   "cat": "visual",
+   "levels": [
+    "beginner",
+    "intermediate"
+   ],
+   "desc": "A visual, interactive introduction to probability and statistics."
+  },
+  {
+   "name": "Immersive Linear Algebra",
+   "url": "https://immersivemath.com/ila/",
+   "cat": "visual",
+   "levels": [
+    "intermediate"
+   ],
+   "desc": "A linear algebra book where every figure is interactive."
+  },
+  {
+   "name": "Explained Visually",
+   "url": "https://setosa.io/ev/",
+   "cat": "visual",
+   "levels": [
+    "beginner",
+    "intermediate"
+   ],
+   "desc": "Interactive explainers for eigenvectors, Markov chains, PCA and more."
+  },
+  {
+   "name": "Mathigon",
+   "url": "https://mathigon.org/",
+   "cat": "visual",
+   "levels": [
+    "beginner"
+   ],
+   "desc": "Interactive courses and a virtual manipulatives playground."
+  },
+  {
+   "name": "NRICH",
+   "url": "https://nrich.maths.org/",
+   "cat": "practice",
+   "levels": [
+    "beginner",
+    "intermediate"
+   ],
+   "desc": "Rich problems and games from the University of Cambridge."
+  },
+  {
+   "name": "Art of Problem Solving",
+   "url": "https://artofproblemsolving.com/",
+   "cat": "practice",
+   "levels": [
+    "intermediate",
+    "advanced"
+   ],
+   "desc": "Competition math: problems, the AoPS wiki, forums and courses."
+  },
+  {
+   "name": "Project Euler",
+   "url": "https://projecteuler.net/",
+   "cat": "practice",
+   "levels": [
+    "intermediate",
+    "advanced"
+   ],
+   "desc": "Hundreds of math problems you solve by writing small programs."
+  },
+  {
+   "name": "IMO problems archive",
+   "url": "https://www.imo-official.org/problems.aspx",
+   "cat": "practice",
+   "levels": [
+    "advanced"
+   ],
+   "desc": "Every International Mathematical Olympiad problem since 1959."
+  },
+  {
+   "name": "Desmos Graphing Calculator",
+   "url": "https://www.desmos.com/calculator",
+   "cat": "tools",
+   "levels": [
+    "beginner",
+    "intermediate"
+   ],
+   "desc": "Free, fast, beautiful graphing in the browser."
+  },
+  {
+   "name": "GeoGebra",
+   "url": "https://www.geogebra.org/",
+   "cat": "tools",
+   "levels": [
+    "beginner",
+    "intermediate"
+   ],
+   "desc": "Geometry, graphing, 3D and CAS tools, plus thousands of classroom activities."
+  },
+  {
+   "name": "Wolfram|Alpha",
+   "url": "https://www.wolframalpha.com/",
+   "cat": "tools",
+   "levels": [
+    "beginner",
+    "intermediate",
+    "advanced"
+   ],
+   "desc": "Ask math questions in plain English and get computed answers."
+  },
+  {
+   "name": "SageMath",
+   "url": "https://www.sagemath.org/",
+   "cat": "tools",
+   "levels": [
+    "advanced"
+   ],
+   "desc": "Free open-source math software built on Python."
+  },
+  {
+   "name": "Overleaf",
+   "url": "https://www.overleaf.com/",
+   "cat": "tools",
+   "levels": [
+    "intermediate",
+    "advanced"
+   ],
+   "desc": "Write math in LaTeX online, with templates and collaboration."
+  },
+  {
+   "name": "Detexify",
+   "url": "https://detexify.kirelabs.org/classify.html",
+   "cat": "tools",
+   "levels": [
+    "intermediate",
+    "advanced"
+   ],
+   "desc": "Draw a symbol, get its LaTeX command."
+  },
+  {
+   "name": "Wolfram MathWorld",
+   "url": "https://mathworld.wolfram.com/",
+   "cat": "reference",
+   "levels": [
+    "intermediate",
+    "advanced"
+   ],
+   "desc": "A large encyclopedia of mathematical terms and results."
+  },
+  {
+   "name": "OEIS",
+   "url": "https://oeis.org/",
+   "cat": "reference",
+   "levels": [
+    "intermediate",
+    "advanced"
+   ],
+   "desc": "The On-Line Encyclopedia of Integer Sequences."
+  },
+  {
+   "name": "ProofWiki",
+   "url": "https://proofwiki.org/",
+   "cat": "reference",
+   "levels": [
+    "intermediate",
+    "advanced"
+   ],
+   "desc": "A collaborative compendium of mathematical proofs."
+  },
+  {
+   "name": "nLab",
+   "url": "https://ncatlab.org/nlab/show/HomePage",
+   "cat": "reference",
+   "levels": [
+    "advanced"
+   ],
+   "desc": "A wiki for category theory and higher mathematics."
+  },
+  {
+   "name": "NIST Digital Library of Mathematical Functions",
+   "url": "https://dlmf.nist.gov/",
+   "cat": "reference",
+   "levels": [
+    "advanced"
+   ],
+   "desc": "The standard reference for special functions."
+  },
+  {
+   "name": "LMFDB",
+   "url": "https://www.lmfdb.org/",
+   "cat": "reference",
+   "levels": [
+    "advanced"
+   ],
+   "desc": "The L-functions and modular forms database."
+  },
+  {
+   "name": "Natural Number Game",
+   "url": "https://adam.math.hhu.de/#/g/leanprover-community/nng4",
+   "cat": "proofs",
+   "levels": [
+    "beginner",
+    "intermediate"
+   ],
+   "desc": "Learn to write computer-checked proofs in Lean by building arithmetic from scratch."
+  },
+  {
+   "name": "Lean community",
+   "url": "https://leanprover-community.github.io/",
+   "cat": "proofs",
+   "levels": [
+    "advanced"
+   ],
+   "desc": "Mathlib, tutorials and the community formalizing mathematics in Lean."
+  },
+  {
+   "name": "Quanta Magazine: Mathematics",
+   "url": "https://www.quantamagazine.org/mathematics/",
+   "cat": "reading",
+   "levels": [
+    "beginner",
+    "intermediate",
+    "advanced"
+   ],
+   "desc": "Award-winning reporting on new math research, written for everyone."
+  },
+  {
+   "name": "Plus Magazine",
+   "url": "https://plus.maths.org/",
+   "cat": "reading",
+   "levels": [
+    "beginner",
+    "intermediate"
+   ],
+   "desc": "Articles about math in the real world, from Cambridge."
+  },
+  {
+   "name": "Terence Tao's blog",
+   "url": "https://terrytao.wordpress.com/",
+   "cat": "reading",
+   "levels": [
+    "advanced"
+   ],
+   "desc": "Research notes and expository posts from a Fields medallist."
+  },
+  {
+   "name": "arXiv: Mathematics",
+   "url": "https://arxiv.org/archive/math",
+   "cat": "reading",
+   "levels": [
+    "advanced"
+   ],
+   "desc": "New math research papers, free, every day."
+  },
+  {
+   "name": "Cut the Knot",
+   "url": "https://www.cut-the-knot.org/",
+   "cat": "reading",
+   "levels": [
+    "intermediate"
+   ],
+   "desc": "Puzzles, proofs and interactive math miscellany."
+  },
+  {
+   "name": "Math Stack Exchange",
+   "url": "https://math.stackexchange.com/",
+   "cat": "community",
+   "levels": [
+    "beginner",
+    "intermediate",
+    "advanced"
+   ],
+   "desc": "Ask and answer math questions at any level."
+  },
+  {
+   "name": "MathOverflow",
+   "url": "https://mathoverflow.net/",
+   "cat": "community",
+   "levels": [
+    "advanced"
+   ],
+   "desc": "Q&A for research-level mathematics."
+  },
+  {
+   "name": "r/learnmath",
+   "url": "https://www.reddit.com/r/learnmath/",
+   "cat": "community",
+   "levels": [
+    "beginner",
+    "intermediate"
+   ],
+   "desc": "A friendly subreddit for people learning math."
+  }
+ ],
+ "playlists": [
+  {
+   "list": "PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab",
+   "cat": "Linear algebra",
+   "levels": [
+    "beginner",
+    "intermediate"
+   ],
+   "title": "Essence of linear algebra",
+   "channel": "3Blue1Brown"
+  },
+  {
+   "list": "PLZHQObOWTQDMsr9K-rj53DwVRMYO3t5Yr",
+   "cat": "Calculus",
+   "levels": [
+    "beginner",
+    "intermediate"
+   ],
+   "title": "Essence of calculus",
+   "channel": "3Blue1Brown"
+  },
+  {
+   "list": "PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi",
+   "cat": "Math for machine learning",
+   "levels": [
+    "intermediate"
+   ],
+   "title": "Neural networks",
+   "channel": "3Blue1Brown"
+  },
+  {
+   "list": "PLZHQObOWTQDNPOjrT6KVlfJuKtYTftqH6",
+   "cat": "Differential equations",
+   "levels": [
+    "intermediate"
+   ],
+   "title": "Differential equations",
+   "channel": "3Blue1Brown"
+  },
+  {
+   "list": "PLZHQObOWTQDP5CVelJJ1bNDouqrAhVPev",
+   "cat": "Precalculus",
+   "levels": [
+    "beginner"
+   ],
+   "title": "Lockdown math",
+   "channel": "3Blue1Brown"
+  },
+  {
+   "list": "PLE7DDD91010BC51F8",
+   "cat": "Linear algebra",
+   "levels": [
+    "intermediate"
+   ],
+   "title": "MIT 18.06 Linear Algebra, Spring 2005",
+   "channel": "MIT OpenCourseWare"
+  },
+  {
+   "list": "PLUl4u3cNGP63oMNUHXqIUcrkS2PivhN3k",
+   "cat": "Math for machine learning",
+   "levels": [
+    "advanced"
+   ],
+   "title": "MIT 18.065 Matrix Methods in Data Analysis, Signal Processing, and Machine Learning, Spring 2018",
+   "channel": "MIT OpenCourseWare"
+  },
+  {
+   "list": "PL590CCC2BC5AF3BC1",
+   "cat": "Calculus",
+   "levels": [
+    "beginner",
+    "intermediate"
+   ],
+   "title": "MIT 18.01 Single Variable Calculus, Fall 2006",
+   "channel": "MIT OpenCourseWare"
+  },
+  {
+   "list": "PL4C4C8A7D06566F38",
+   "cat": "Calculus",
+   "levels": [
+    "intermediate"
+   ],
+   "title": "MIT 18.02 Multivariable Calculus, Fall 2007",
+   "channel": "MIT OpenCourseWare"
+  },
+  {
+   "list": "PLF797E961509B4EB5",
+   "cat": "Calculus",
+   "levels": [
+    "beginner"
+   ],
+   "title": "Calculus 1 (Full Length Videos)",
+   "channel": "Professor Leonard"
+  },
+  {
+   "list": "PL2SOU6wwxB0uwwH80KTQ6ht66KWxbzTIo",
+   "cat": "Probability & statistics",
+   "levels": [
+    "intermediate"
+   ],
+   "title": "Statistics 110: Probability",
+   "channel": "Harvard University"
+  },
+  {
+   "list": "PLB7540DEDD482705B",
+   "cat": "Proofs & discrete math",
+   "levels": [
+    "intermediate"
+   ],
+   "title": "MIT 6.042J Mathematics for Computer Science, Fall 2010",
+   "channel": "MIT OpenCourseWare"
+  },
+  {
+   "list": "PLHXZ9OQGMqxersk8fUxiUMSIx0DBqsKZS",
+   "cat": "Proofs & discrete math",
+   "levels": [
+    "beginner",
+    "intermediate"
+   ],
+   "title": "Discrete Math (Full Course: Sets, Logic, Proofs, Probability, Graph Theory, etc)",
+   "channel": "Dr. Trefor Bazett"
+  },
+  {
+   "list": "PLUl4u3cNGP61O7HkcF7UImpM0cR_L2gSw",
+   "cat": "Analysis",
+   "levels": [
+    "advanced"
+   ],
+   "title": "MIT 18.100A Real Analysis, Fall 2020",
+   "channel": "MIT OpenCourseWare"
+  },
+  {
+   "list": "PLelIK3uylPMGzHBuR3hLMHrYfMqWWsmx5",
+   "cat": "Abstract algebra",
+   "levels": [
+    "advanced"
+   ],
+   "title": "Abstract Algebra",
+   "channel": "It's so blatant"
+  },
+  {
+   "list": "PLbgaMIhjbmEnaH_LTkxLI7FMa2HsnawM_",
+   "cat": "Category theory",
+   "levels": [
+    "advanced"
+   ],
+   "title": "Category Theory",
+   "channel": "Bartosz Milewski"
+  },
+  {
+   "list": "PLMrJAkhIeNNR20Mz-VpzgfQs5zrYi085m",
+   "cat": "Applied math",
+   "levels": [
+    "advanced"
+   ],
+   "title": "Control Bootcamp",
+   "channel": "Steve Brunton"
+  }
+ ]
+}
