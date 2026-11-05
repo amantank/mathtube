@@ -4,25 +4,25 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MathTube</title>
-<meta name="description" content="The math videos that Hacker News keeps telling each other to watch.">
+<meta name="description" content="The best math videos on YouTube, recommended by Hacker News and the MathTube community.">
 <meta property="og:title" content="MathTube">
-<meta property="og:description" content="The math videos that Hacker News keeps telling each other to watch.">
+<meta property="og:description" content="The best math videos on YouTube, recommended by Hacker News and the MathTube community.">
 <meta property="og:url" content="https://mathtube.in/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234f46e5'/%3E%3Ctext x='16' y='24' text-anchor='middle' font-family='Georgia,serif' font-weight='700' font-size='24' fill='white'%3E%CF%80%3C/text%3E%3C/svg%3E">
 <style>
   :root {
     --bg: #fff; --bg2: #f2f2f4; --text: #111; --muted: #5f6368; --line: #e3e3e8;
-    --accent: #4f46e5; --chip-on: #111; --chip-on-text: #fff; --hover: rgba(0,0,0,.05);
+    --accent: #4f46e5; --chip-on: #111; --chip-on-text: #fff; --hover: rgba(0,0,0,.05); --danger: #c62828;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
       --bg: #0e0f13; --bg2: #23252d; --text: #eef0f4; --muted: #a2a6b0; --line: #2c2f38;
-      --accent: #8b85ff; --chip-on: #eef0f4; --chip-on-text: #0e0f13; --hover: rgba(255,255,255,.08);
+      --accent: #8b85ff; --chip-on: #eef0f4; --chip-on-text: #0e0f13; --hover: rgba(255,255,255,.08); --danger: #ef7070;
     }
   }
   :root[data-theme="dark"] {
     --bg: #0e0f13; --bg2: #23252d; --text: #eef0f4; --muted: #a2a6b0; --line: #2c2f38;
-    --accent: #8b85ff; --chip-on: #eef0f4; --chip-on-text: #0e0f13; --hover: rgba(255,255,255,.08);
+    --accent: #8b85ff; --chip-on: #eef0f4; --chip-on-text: #0e0f13; --hover: rgba(255,255,255,.08); --danger: #ef7070;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; background: var(--bg); color: var(--text); }
@@ -30,6 +30,7 @@
   a { color: inherit; text-decoration: none; }
   button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
   svg { width: 22px; height: 22px; fill: currentColor; flex: none; }
+  [hidden] { display: none !important; }
 
   .top { position: sticky; top: 0; z-index: 5; background: var(--bg); height: 56px; display: flex;
          align-items: center; gap: 12px; padding: 0 16px; border-bottom: 1px solid var(--line); }
@@ -44,9 +45,11 @@
   .search button { width: 56px; border: 1px solid var(--line); border-left: 0; border-radius: 0 19px 19px 0; background: var(--bg2); }
   .icon { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; flex: none; }
   .icon:hover { background: var(--hover); }
+  .right { display: flex; align-items: center; gap: 8px; flex: none; }
+  .avatar { width: 32px; height: 32px; border-radius: 50%; display: block; }
 
   .layout { display: flex; }
-  .side { width: 200px; flex: none; padding: 12px; position: sticky; top: 56px; height: calc(100vh - 56px); overflow-y: auto; }
+  .side { width: 210px; flex: none; padding: 12px; position: sticky; top: 56px; height: calc(100vh - 56px); overflow-y: auto; }
   .side a { display: flex; align-items: center; gap: 14px; padding: 9px 12px; border-radius: 10px; }
   .side a:hover { background: var(--hover); }
   .side a.on { background: var(--bg2); font-weight: 600; }
@@ -60,10 +63,11 @@
   .chip:hover:not(.on) { filter: brightness(.95); }
 
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 28px 16px; }
-  .card .th, .row .th, .next .th { position: relative; aspect-ratio: 16/9; border-radius: 12px; overflow: hidden; background: var(--bg2); }
+  .th { position: relative; aspect-ratio: 16/9; border-radius: 12px; overflow: hidden; background: var(--bg2); }
   .th img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .badge { position: absolute; right: 6px; bottom: 6px; background: rgba(0,0,0,.8); color: #fff; font-size: 12px;
            font-weight: 600; padding: 1px 5px; border-radius: 4px; }
+  .badge.c { background: var(--accent); }
   .vt { margin: 10px 0 4px; font-size: 16px; font-weight: 600; line-height: 1.35;
         display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .sub { color: var(--muted); font-size: 13px; }
@@ -71,19 +75,32 @@
   .row { display: grid; grid-template-columns: 360px 1fr; gap: 16px; margin-bottom: 16px; }
   .row .vt { margin-top: 0; font-size: 18px; }
   .snip { color: var(--muted); margin-top: 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .crow { display: grid; grid-template-columns: 48px 240px 1fr; gap: 14px; align-items: start; margin-bottom: 16px; }
+  .vote { display: flex; flex-direction: column; align-items: center; padding: 6px 0; border-radius: 10px; font-weight: 700; }
+  .vote:hover { background: var(--hover); }
+  .vote .arr { font-size: 18px; line-height: 1; color: var(--muted); }
+  .vote.on .arr, .vote.on { color: var(--accent); }
 
   .watch { display: grid; grid-template-columns: minmax(0, 1fr) 400px; gap: 24px; max-width: 1700px; }
   .player { aspect-ratio: 16/9; border-radius: 12px; overflow: hidden; background: #000; }
   .player iframe { width: 100%; height: 100%; border: 0; display: block; }
   .watch h1 { font-size: 20px; margin: 12px 0 8px; }
-  .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+  .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; position: relative; }
   .actions .chan { font-weight: 600; margin-right: auto; }
   .pill { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 18px; background: var(--bg2); font-weight: 500; }
   .pill:hover { filter: brightness(.95); }
   .pill.on { background: var(--chip-on); color: var(--chip-on-text); }
+  .pill.primary { background: var(--accent); color: #fff; }
+  .pill.danger { color: var(--danger); }
   .pill svg { width: 18px; height: 18px; }
+  .menu { position: absolute; right: 0; top: 44px; z-index: 4; min-width: 260px; max-height: 360px; overflow-y: auto;
+          background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 8px; box-shadow: 0 8px 30px rgba(0,0,0,.2); }
+  .menu button { display: flex; width: 100%; gap: 10px; align-items: center; padding: 8px 10px; border-radius: 8px; text-align: left; }
+  .menu button:hover { background: var(--hover); }
+  .menu .box { width: 18px; height: 18px; border: 2px solid var(--muted); border-radius: 4px; display: grid; place-items: center; font-size: 12px; flex: none; }
+  .menu .on .box { background: var(--accent); border-color: var(--accent); color: #fff; }
   .desc { background: var(--bg2); border-radius: 12px; padding: 12px 14px; margin-top: 12px; }
-  .desc p { margin: 6px 0; }
+  .desc p { margin: 6px 0; white-space: pre-wrap; }
   .desc .meta { font-weight: 600; }
   .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
   .tags a { color: var(--accent); }
@@ -100,20 +117,50 @@
   .next .th { border-radius: 8px; }
   .next .vt { margin: 0 0 4px; font-size: 14px; }
 
-  .pagehead h2 { margin: 4px 0 4px; font-size: 24px; }
-  .pagehead p { margin: 0 0 16px; color: var(--muted); }
+  .pagehead { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .pagehead > div { flex: 1; min-width: 200px; }
+  .pagehead h2 { margin: 4px 0; font-size: 24px; }
+  .pagehead p { margin: 0; color: var(--muted); white-space: pre-wrap; }
   .empty { color: var(--muted); padding: 40px 0; text-align: center; }
+  .empty a { color: var(--accent); }
   .about { max-width: 720px; font-size: 15px; }
   .about a { color: var(--accent); }
   .more { display: block; margin: 24px auto 0; }
+
+  .form { max-width: 640px; display: grid; gap: 18px; }
+  .form label > span { display: block; font-weight: 600; margin-bottom: 6px; }
+  .form input[type=url], .form input[type=text], .form textarea { width: 100%; padding: 10px 12px; font: inherit; color: var(--text);
+    background: var(--bg); border: 1px solid var(--line); border-radius: 10px; outline: none; }
+  .form input:focus, .form textarea:focus { border-color: var(--accent); }
+  .form textarea { min-height: 110px; resize: vertical; }
+  .checks { display: flex; flex-wrap: wrap; gap: 8px; }
+  .checks label { display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 8px; background: var(--bg2); cursor: pointer; }
+  .hint { color: var(--muted); font-size: 13px; }
+  .err { color: var(--danger); font-weight: 500; }
+
+  .plgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px 16px; }
+  .mosaic { display: grid; grid-template-columns: 1fr 1fr; aspect-ratio: 16/9; border-radius: 12px; overflow: hidden; background: var(--bg2); position: relative; }
+  .mosaic img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .mosaic img:first-child:nth-last-child(2) { grid-column: span 2; }   /* a single video fills the cover */
+  .mosaic .plcount { position: absolute; right: 6px; bottom: 6px; background: rgba(0,0,0,.8); color: #fff; font-size: 12px; font-weight: 600; padding: 2px 6px; border-radius: 4px; }
+  .plrow { display: grid; grid-template-columns: 28px 1fr auto; gap: 8px; align-items: center; }
+  .plrow .num { color: var(--muted); text-align: right; }
+  .plrow .row { margin-bottom: 12px; grid-template-columns: 240px 1fr; }
+
+  .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--chip-on); color: var(--chip-on-text);
+           padding: 10px 16px; border-radius: 8px; z-index: 20; opacity: 0; transition: opacity .2s; pointer-events: none; }
+  .toast.show { opacity: 1; }
 
   @media (max-width: 1100px) { .watch { grid-template-columns: 1fr; } }
   @media (max-width: 900px) { .side { display: none; } .side.open { display: block; position: fixed; left: 0; z-index: 6; background: var(--bg); box-shadow: 0 0 24px rgba(0,0,0,.3); } }
   @media (min-width: 901px) { #menu { display: none; } }
   @media (max-width: 640px) {
     main { padding: 12px 16px 40px; }
-    .brand span.word { display: none; }
-    .row { grid-template-columns: 1fr; }
+    .top { gap: 6px; padding: 0 8px; }
+    .brand span.word, .right .label { display: none; }
+    .row, .plrow .row { grid-template-columns: 1fr; }
+    .crow { grid-template-columns: 40px 1fr; }
+    .crow .th { display: none; }
     .next { grid-template-columns: 140px 1fr; }
   }
 </style>
@@ -126,22 +173,30 @@
     <input id="q" type="search" placeholder="Search math videos  ( / )" autocomplete="off" aria-label="Search">
     <button aria-label="Search"><svg viewBox="0 0 24 24"><path d="M20.87 20.17l-5.59-5.59A6.95 6.95 0 0 0 17 10a7 7 0 1 0-7 7c1.75 0 3.35-.64 4.58-1.71l5.59 5.59.7-.71zM10 16a6 6 0 1 1 0-12 6 6 0 0 1 0 12z"/></svg></button>
   </form>
-  <button class="icon" id="theme" aria-label="Toggle dark mode"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.39 5.39 0 0 1-4.4 2.26 5.4 5.4 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg></button>
+  <div class="right">
+    <a class="pill" id="submitBtn" href="#/submit" hidden><svg viewBox="0 0 24 24"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6z"/></svg><span class="label">Submit</span></a>
+    <button class="icon" id="theme" aria-label="Toggle dark mode"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.39 5.39 0 0 1-4.4 2.26 5.4 5.4 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg></button>
+    <span id="auth"></span>
+  </div>
 </header>
 <div class="layout">
   <nav class="side" id="side">
-    <a href="#/" data-nav=""><svg viewBox="0 0 24 24"><path d="M4 21V10.08l8-6.96 8 6.96V21h-6v-6h-4v6H4z"/></svg>Home</a>
-    <a href="#/liked" data-nav="liked"><svg viewBox="0 0 24 24"><path d="M18.77 11h-4.23l1.52-4.94C16.38 5.03 15.54 4 14.38 4c-.58 0-1.14.24-1.52.65L7 11H3v10h14.43c1.06 0 1.98-.67 2.19-1.61l1.34-6c.27-1.24-.78-2.39-2.19-2.39zM7 20H4v-8h3v8z"/></svg>Liked</a>
-    <a href="#/later" data-nav="later"><svg viewBox="0 0 24 24"><path d="M14.97 16.95 10 13.87V7h2v5.76l4.03 2.49-1.06 1.7zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>Watch later</a>
-    <a href="#/history" data-nav="history"><svg viewBox="0 0 24 24"><path d="M13 3a9 9 0 0 0-9 9H1l3.89 3.89L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.954 8.954 0 0 0 13 21a9 9 0 0 0 0-18zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>History</a>
+    <a href="#/"><svg viewBox="0 0 24 24"><path d="M4 21V10.08l8-6.96 8 6.96V21h-6v-6h-4v6H4z"/></svg>Home</a>
+    <a href="#/new" data-api hidden><svg viewBox="0 0 24 24"><path d="M12 4l7 8h-4v8H9v-8H5z"/></svg>Community</a>
+    <a href="#/playlists" data-api hidden><svg viewBox="0 0 24 24"><path d="M3 6h12v2H3zm0 4h12v2H3zm0 4h8v2H3zm12 0v6l5-3z"/></svg>Playlists</a>
+    <hr>
+    <a href="#/liked"><svg viewBox="0 0 24 24"><path d="M18.77 11h-4.23l1.52-4.94C16.38 5.03 15.54 4 14.38 4c-.58 0-1.14.24-1.52.65L7 11H3v10h14.43c1.06 0 1.98-.67 2.19-1.61l1.34-6c.27-1.24-.78-2.39-2.19-2.39zM7 20H4v-8h3v8z"/></svg>Liked</a>
+    <a href="#/later"><svg viewBox="0 0 24 24"><path d="M14.97 16.95 10 13.87V7h2v5.76l4.03 2.49-1.06 1.7zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>Watch later</a>
+    <a href="#/history"><svg viewBox="0 0 24 24"><path d="M13 3a9 9 0 0 0-9 9H1l3.89 3.89L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.954 8.954 0 0 0 13 21a9 9 0 0 0 0-18zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>History</a>
     <hr>
     <div class="small">Topics</div>
     <div id="topics"></div>
     <hr>
-    <a href="#/about" data-nav="about"><svg viewBox="0 0 24 24"><path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>About</a>
+    <a href="#/about"><svg viewBox="0 0 24 24"><path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>About</a>
   </nav>
   <main id="view"><div class="empty">Loading…</div></main>
 </div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
 "use strict";
 const $ = (s) => document.querySelector(s);
@@ -151,7 +206,8 @@ const store = {
   get(k, d) { try { return JSON.parse(localStorage.getItem("mt:" + k)) ?? d; } catch { return d; } },
   set(k, v) { try { localStorage.setItem("mt:" + k, JSON.stringify(v)); } catch {} },
 };
-let DATA, BY = {};
+let DATA, BY = {}, COMM = [];
+let API = false, ME = null, VOTED = new Set();   // API is false when the site runs without the backend (plain static hosting)
 const lists = { liked: store.get("liked", []), later: store.get("later", []), history: store.get("history", []) };
 const toggle = (name, vid) => {
   const l = lists[name], i = l.indexOf(vid);
@@ -159,6 +215,18 @@ const toggle = (name, vid) => {
   store.set(name, l);
   return i < 0;
 };
+let toastTimer;
+function toast(msg) {
+  const t = $("#toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 2600);
+}
+async function api(path, opts = {}) {
+  const r = await fetch("/api/" + path, { credentials: "same-origin", ...opts,
+    headers: opts.body ? { "Content-Type": "application/json" } : {}, body: opts.body && JSON.stringify(opts.body) });
+  const data = await r.json().catch(() => ({}));
+  if (!r.ok) throw Object.assign(new Error(data.error || `Request failed (${r.status})`), { status: r.status, data });
+  return data;
+}
 
 // theme
 const applyTheme = (t) => t ? document.documentElement.setAttribute("data-theme", t) : document.documentElement.removeAttribute("data-theme");
@@ -170,52 +238,148 @@ $("#theme").onclick = () => {
 $("#menu").onclick = () => $("#side").classList.toggle("open");
 
 // ---------- components ----------
-const thumb = (v) => `<div class="th"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/${v.vid}/mqdefault.jpg"><span class="badge">${esc(v.level)}</span></div>`;
-const recs = (v) => `${v.recs} HN recommender${v.recs === 1 ? "" : "s"} · ${v.years[0] === v.years[1] ? v.years[0] : v.years.join("–")}`;
+const ago = (d) => {
+  const s = (Date.now() - new Date(d)) / 1000;
+  for (const [n, u] of [[31536000, "year"], [2592000, "month"], [86400, "day"], [3600, "hour"], [60, "minute"]])
+    if (s >= n) { const k = Math.floor(s / n); return `${k} ${u}${k > 1 ? "s" : ""} ago`; }
+  return "just now";
+};
+const thumb = (v) => `<div class="th"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/${v.vid}/mqdefault.jpg"><span class="badge ${v.community ? "c" : ""}">${esc(v.community ? "community" : v.level)}</span></div>`;
+const meta = (v) => v.community ? `▲ ${v.votes} · shared by ${esc(v.by)} · ${ago(v.createdAt)}`
+  : `${v.recs} HN recommender${v.recs === 1 ? "" : "s"} · ${v.years[0] === v.years[1] ? v.years[0] : v.years.join("–")}`;
 const card = (v) => `<a class="card" href="#/watch/${v.vid}">${thumb(v)}<h3 class="vt">${esc(v.title)}</h3>
-  <div class="sub">${esc(v.channel)}</div><div class="sub">${recs(v)}</div></a>`;
+  <div class="sub">${esc(v.channel)}</div><div class="sub">${meta(v)}</div></a>`;
 const row = (v) => `<a class="row" href="#/watch/${v.vid}">${thumb(v)}<div style="min-width:0"><h3 class="vt">${esc(v.title)}</h3>
-  <div class="sub">${esc(v.channel)} · ${recs(v)}</div><div class="snip">${esc(v.summary)}</div></div></a>`;
+  <div class="sub">${esc(v.channel)} · ${meta(v)}</div><div class="snip">${esc(v.summary)}</div></div></a>`;
 const next = (v) => `<a class="next" href="#/watch/${v.vid}">${thumb(v)}<div style="min-width:0"><h3 class="vt">${esc(v.title)}</h3>
-  <div class="sub">${esc(v.channel)}</div><div class="sub">${v.recs} recommenders</div></div></a>`;
+  <div class="sub">${esc(v.channel)}</div><div class="sub">${meta(v)}</div></div></a>`;
+const voteBtn = (v) => `<button class="vote ${VOTED.has(v.vid) ? "on" : ""}" data-vote="${v.vid}" aria-label="Upvote"><span class="arr">▲</span><span>${v.votes}</span></button>`;
+const crow = (v) => `<div class="crow">${voteBtn(v)}<a href="#/watch/${v.vid}">${thumb(v)}</a>
+  <a href="#/watch/${v.vid}" style="min-width:0"><h3 class="vt" style="margin-top:0">${esc(v.title)}</h3>
+  <div class="sub">${esc(v.channel)} · ${meta(v)}</div><div class="snip">${esc(v.summary)}</div></a></div>`;
 const commentText = (t) => esc(t).replace(/\[VIDEO\]/g, '<span class="mark v">▶ this video</span>').replace(/\[LINK\]/g, '<span class="mark">link</span>');
 const hue = (s) => [...s].reduce((h, c) => (h * 31 + c.charCodeAt(0)) % 360, 7);
+const signInPrompt = (what) => `<div class="empty">Sign in with GitHub to ${what}.<br><br><a class="pill primary" href="/api/auth/login">Sign in with GitHub</a></div>`;
+const noApi = `<div class="empty">Community features need the MathTube server. Run <code>npm run dev</code> instead of a plain static server.</div>`;
 
-function grid(videos, paged = true) {
+function grid(videos) {
   if (!videos.length) return `<div class="empty">Nothing here yet.</div>`;
   const id = "g" + Math.random().toString(36).slice(2);
   setTimeout(() => {
-    const el = document.getElementById(id); let n = 0;
-    const more = () => { el.insertAdjacentHTML("beforeend", videos.slice(n, n += 48).map(card).join(""));
-      btn.hidden = n >= videos.length; };
-    const btn = document.getElementById(id + "m");
+    const el = document.getElementById(id), btn = document.getElementById(id + "m"); let n = 0;
+    const more = () => { el.insertAdjacentHTML("beforeend", videos.slice(n, n += 48).map(card).join("")); btn.hidden = n >= videos.length; };
     btn.onclick = more; more();
   });
   return `<div class="grid" id="${id}"></div><button class="pill more" id="${id}m" hidden>Show more</button>`;
 }
 
+// upvote buttons anywhere on the page
+view.addEventListener("click", async (e) => {
+  const b = e.target.closest("[data-vote]");
+  if (!b) return;
+  e.preventDefault();
+  if (!ME) { location.href = "/api/auth/login"; return; }
+  try {
+    const r = await api("vote", { method: "POST", body: { vid: b.dataset.vote } });
+    r.voted ? VOTED.add(r.vid) : VOTED.delete(r.vid);
+    if (BY[r.vid]) BY[r.vid].votes = r.votes;
+    document.querySelectorAll(`[data-vote="${r.vid}"]`).forEach((x) => { x.classList.toggle("on", r.voted); x.lastElementChild.textContent = r.votes; });
+  } catch (err) { toast(err.message); }
+});
+
 // seeded shuffle so "Shuffle" is stable while browsing, rerolls on reload
-let seed = Math.floor(Math.random() * 1e9);
+const seed = Math.floor(Math.random() * 1e9);
 function shuffled(arr) {
   let s = seed; const a = arr.slice();
   for (let i = a.length - 1; i > 0; i--) { s = (s * 1103515245 + 12345) % 2147483648; const j = s % (i + 1); [a[i], a[j]] = [a[j], a[i]]; }
   return a;
 }
+const allVideos = () => DATA.videos.concat(COMM.filter((v) => BY[v.vid] === v));
 
 // ---------- pages ----------
 function home(cat, sort) {
   const cats = DATA.categories;
-  let vids = DATA.videos.filter((v) => !cat || v.cats.includes(cat));
+  let vids = allVideos().filter((v) => !cat || v.cats.includes(cat));
   if (sort === "shuffle") vids = shuffled(vids);
   else if (sort === "intro") vids = vids.filter((v) => v.level === "intro" || v.level === "general");
   else if (sort === "deep") vids = vids.filter((v) => v.level === "intermediate" || v.level === "advanced");
   const q = (c, s) => `#/${c ? "c/" + c : ""}${s ? "?sort=" + s : ""}`;
   const sorts = [["", "Most recommended"], ["shuffle", "Shuffle"], ["intro", "Beginner-friendly"], ["deep", "Going deeper"]];
-  view.innerHTML = `${cat ? `<div class="pagehead"><h2>${esc(cats[cat])}</h2></div>` : ""}
+  view.innerHTML = `${cat ? `<div class="pagehead"><div><h2>${esc(cats[cat])}</h2></div></div>` : ""}
     <div class="chips">${[["", "All"], ...Object.entries(cats)].map(([id, name]) =>
       `<a class="chip ${id === (cat || "") ? "on" : ""}" href="${q(id, sort)}">${esc(name)}</a>`).join("")}</div>
     <div class="chips">${sorts.map(([s, name]) => `<a class="chip ${s === (sort || "") ? "on" : ""}" href="${q(cat, s)}">${name}</a>`).join("")}</div>
     ${grid(vids)}`;
+}
+
+function community(sort) {
+  if (!API) { view.innerHTML = noApi; return; }
+  const vids = COMM.slice().sort(sort === "top" ? (a, b) => b.votes - a.votes || new Date(b.createdAt) - new Date(a.createdAt)
+    : (a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  view.innerHTML = `<div class="pagehead"><div><h2>Community</h2><p>Math videos shared by MathTube users. Upvote the ones worth watching.</p></div>
+      <a class="pill primary" href="#/submit">+ Share a video</a></div>
+    <div class="chips"><a class="chip ${sort !== "top" ? "on" : ""}" href="#/new">Newest</a><a class="chip ${sort === "top" ? "on" : ""}" href="#/new?sort=top">Top</a></div>
+    ${vids.length ? vids.map(crow).join("") : `<div class="empty">No community videos yet. <a href="#/submit">Be the first to share one.</a></div>`}`;
+}
+
+function submit() {
+  if (!API) { view.innerHTML = noApi; return; }
+  if (!ME) { view.innerHTML = signInPrompt("share a math video"); return; }
+  view.innerHTML = `<div class="pagehead"><div><h2>Share a math video</h2><p>Paste a YouTube link. Good picks teach something real: a proof, an idea, an aha moment.</p></div></div>
+    <form class="form" id="sub">
+      <label><span>YouTube link</span><input type="url" name="url" required placeholder="https://www.youtube.com/watch?v=…"></label>
+      <div><span style="font-weight:600;display:block;margin-bottom:6px">Topics</span>
+        <div class="checks">${Object.entries(DATA.categories).map(([id, n]) => `<label><input type="checkbox" name="cats" value="${id}">${esc(n)}</label>`).join("")}</div></div>
+      <label><span>Why should people watch it?</span><textarea name="note" required minlength="10" maxlength="1000" placeholder="One or two sentences: what it explains and who it's for."></textarea></label>
+      <div><button class="pill primary" type="submit">Share video</button> <span class="err" id="suberr"></span></div>
+    </form>`;
+  $("#sub").onsubmit = async (e) => {
+    e.preventDefault();
+    const f = new FormData(e.target), btn = e.target.querySelector("button");
+    btn.disabled = true; $("#suberr").textContent = "";
+    try {
+      const v = await api("videos", { method: "POST", body: { url: f.get("url"), cats: f.getAll("cats"), note: f.get("note") } });
+      addCommunity([v]); VOTED.add(v.vid);
+      toast("Thanks! Your video is live.");
+      location.hash = "#/watch/" + v.vid;
+    } catch (err) {
+      $("#suberr").innerHTML = esc(err.message) + (err.data?.vid ? ` <a href="#/watch/${err.data.vid}" style="color:var(--accent)">See it</a>` : "");
+      btn.disabled = false;
+    }
+  };
+}
+
+let myPlaylists = null;
+const loadMine = async (force) => (myPlaylists = !force && myPlaylists ? myPlaylists : await api("playlists?mine=1"));
+
+async function playlistMenu(anchor, vid) {
+  const old = anchor.parentElement.querySelector(".menu");
+  if (old) { old.remove(); return; }
+  if (!ME) { location.href = "/api/auth/login"; return; }
+  const menu = document.createElement("div");
+  menu.className = "menu"; menu.textContent = "Loading…";
+  anchor.parentElement.append(menu);
+  const render = () => {
+    menu.innerHTML = `<div class="sub" style="padding:4px 10px 8px">Save to playlist</div>${myPlaylists.map((p) =>
+      `<button data-pl="${p.id}" class="${p.vids.includes(vid) ? "on" : ""}"><span class="box">✓</span>${esc(p.title)}</button>`).join("")}
+      <button data-new><span class="box">+</span>New playlist</button>`;
+  };
+  try { await loadMine(); render(); } catch (e) { menu.textContent = e.message; return; }
+  menu.onclick = async (e) => {
+    const b = e.target.closest("button"); if (!b) return;
+    try {
+      if (b.dataset.new !== undefined) {
+        const title = prompt("Playlist name"); if (!title?.trim()) return;
+        const p = await api("playlists", { method: "POST", body: { title, vid } });
+        myPlaylists.unshift(p); toast(`Saved to “${p.title}”`);
+      } else {
+        const p = myPlaylists.find((x) => x.id === b.dataset.pl), has = p.vids.includes(vid);
+        const up = await api("playlists", { method: "PATCH", body: { id: p.id, [has ? "remove" : "add"]: vid } });
+        Object.assign(p, up); toast(has ? `Removed from “${p.title}”` : `Saved to “${p.title}”`);
+      }
+      render();
+    } catch (err) { toast(err.message); }
+  };
 }
 
 function watch(vid) {
@@ -223,7 +387,7 @@ function watch(vid) {
   if (!v) { view.innerHTML = `<div class="empty">Video not found. <a href="#/">Go home</a></div>`; return; }
   lists.history = lists.history.filter((x) => x !== vid).concat(vid).slice(-200); store.set("history", lists.history);
   const related = (v.related || []).map((r) => BY[r]).filter(Boolean);
-  const fill = DATA.videos.filter((x) => x.vid !== vid && !v.related?.includes(x.vid) && x.cats.some((c) => v.cats.includes(c)));
+  const fill = allVideos().filter((x) => x.vid !== vid && !related.includes(x) && x.cats.some((c) => v.cats.includes(c)));
   const upNext = related.concat(fill).slice(0, 20);
   const btn = (name, label, icon) => `<button class="pill ${lists[name].includes(vid) ? "on" : ""}" data-toggle="${name}">${icon}${label}</button>`;
   view.innerHTML = `<div class="watch"><div>
@@ -231,49 +395,103 @@ function watch(vid) {
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
     <h1>${esc(v.title)}</h1>
     <div class="actions"><span class="chan">${esc(v.channel)}</span>
+      ${v.community ? `<button class="pill vote-pill ${VOTED.has(vid) ? "on" : ""}" data-vote="${vid}"><span>▲</span><span>${v.votes}</span></button>` : ""}
       ${btn("liked", "Like", '<svg viewBox="0 0 24 24"><path d="M18.77 11h-4.23l1.52-4.94C16.38 5.03 15.54 4 14.38 4c-.58 0-1.14.24-1.52.65L7 11H3v10h14.43c1.06 0 1.98-.67 2.19-1.61l1.34-6c.27-1.24-.78-2.39-2.19-2.39z"/></svg>')}
-      ${btn("later", "Save", '<svg viewBox="0 0 24 24"><path d="M14.97 16.95 10 13.87V7h2v5.76l4.03 2.49-1.06 1.7zM12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"/></svg>')}
+      ${btn("later", "Later", '<svg viewBox="0 0 24 24"><path d="M14.97 16.95 10 13.87V7h2v5.76l4.03 2.49-1.06 1.7zM12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"/></svg>')}
+      ${API ? `<button class="pill" id="plbtn"><svg viewBox="0 0 24 24"><path d="M3 6h12v2H3zm0 4h12v2H3zm0 4h8v2H3zm14-4v4h-4v2h4v4h2v-4h4v-2h-4v-4z"/></svg>Save</button>` : ""}
       <a class="pill" href="https://www.youtube.com/watch?v=${vid}" target="_blank" rel="noopener">YouTube ↗</a></div>
     <div class="desc">
-      <div class="meta">${recs(v)} · ${esc(v.type)} · ${esc(v.level)}</div>
-      <p>${esc(v.summary)}</p>
-      <p><b>Why HN recommends it:</b> ${esc(v.why)}</p>
+      <div class="meta">${meta(v)}${v.type ? ` · ${esc(v.type)} · ${esc(v.level)}` : ""}</div>
+      ${v.community ? `<p><b>Why watch it:</b> ${esc(v.summary)}</p>` : `<p>${esc(v.summary)}</p><p><b>Why HN recommends it:</b> ${esc(v.why)}</p>`}
       <div class="tags">${v.cats.map((c) => `<a href="#/c/${c}">#${esc(DATA.categories[c])}</a>`).join("")}
-        ${v.tags.map((t) => `<a href="#/search/${encodeURIComponent(t)}">${esc(t)}</a>`).join("")}</div>
+        ${(v.tags || []).map((t) => `<a href="#/search/${encodeURIComponent(t)}">${esc(t)}</a>`).join("")}</div>
     </div>
-    <section class="comments"><h2>What Hacker News said</h2>
+    ${v.comments ? `<section class="comments"><h2>What Hacker News said</h2>
       ${v.comments.map((c) => `<div class="cm"><div class="av" style="background:hsl(${hue(c.by)} 55% 45%)">${esc(c.by[0].toUpperCase())}</div>
         <div style="min-width:0"><div class="who"><b>${esc(c.by)}</b><a href="https://news.ycombinator.com/item?id=${c.id}" target="_blank" rel="noopener">${esc(c.month)} · on “${esc(c.story)}” ↗</a></div>
         <div class="text">${commentText(c.text)}</div></div></div>`).join("")}
-    </section></div>
+    </section>` : ""}</div>
     <aside>${upNext.map(next).join("")}</aside></div>`;
   view.querySelectorAll("[data-toggle]").forEach((b) => b.onclick = () => b.classList.toggle("on", toggle(b.dataset.toggle, vid)));
+  if ($("#plbtn")) $("#plbtn").onclick = (e) => playlistMenu(e.currentTarget, vid);
   scrollTo(0, 0);
+}
+
+const plCard = (p) => `<a href="#/p/${p.id}"><div class="mosaic">${p.vids.slice(0, 4).map((v) =>
+    `<img loading="lazy" alt="" src="https://i.ytimg.com/vi/${v}/mqdefault.jpg">`).join("")}<span class="plcount">${p.vids.length} video${p.vids.length === 1 ? "" : "s"}</span></div>
+  <h3 class="vt">${esc(p.title)}</h3><div class="sub">by ${esc(p.by)} · updated ${ago(p.updatedAt)}</div></a>`;
+
+async function playlists(mine) {
+  if (!API) { view.innerHTML = noApi; return; }
+  if (mine && !ME) { view.innerHTML = signInPrompt("make playlists"); return; }
+  view.innerHTML = `<div class="pagehead"><div><h2>Playlists</h2><p>Learning paths made by the community, in the order they're meant to be watched.</p></div>
+      ${ME ? `<button class="pill primary" id="newpl">+ New playlist</button>` : ""}</div>
+    <div class="chips"><a class="chip ${mine ? "" : "on"}" href="#/playlists">All</a><a class="chip ${mine ? "on" : ""}" href="#/playlists?mine=1">Mine</a></div>
+    <div id="pls" class="empty">Loading…</div>`;
+  if ($("#newpl")) $("#newpl").onclick = async () => {
+    const title = prompt("Playlist name"); if (!title?.trim()) return;
+    try { const p = await api("playlists", { method: "POST", body: { title } }); myPlaylists?.unshift(p); location.hash = "#/p/" + p.id; }
+    catch (e) { toast(e.message); }
+  };
+  try {
+    const list = mine ? await loadMine(true) : await api("playlists");
+    const el = $("#pls"); if (!el) return;
+    el.className = list.length ? "plgrid" : "empty";
+    el.innerHTML = list.length ? list.map(plCard).join("")
+      : mine ? "You have no playlists yet. Open any video and press Save to start one." : "No playlists yet. Make the first one!";
+  } catch (e) { $("#pls").textContent = e.message; }
+}
+
+async function playlist(id) {
+  if (!API) { view.innerHTML = noApi; return; }
+  view.innerHTML = `<div class="empty">Loading…</div>`;
+  let p;
+  try { p = await api("playlists?id=" + encodeURIComponent(id)); } catch (e) { view.innerHTML = `<div class="empty">${esc(e.message)}</div>`; return; }
+  const own = ME && ME.id === p.owner;
+  const vids = p.vids.map((v) => BY[v] || { vid: v, title: "YouTube video", channel: "", summary: "", cats: [], recs: 0, years: ["", ""] });
+  const playAll = vids.length ? `<a class="pill primary" target="_blank" rel="noopener" href="https://www.youtube.com/watch_videos?video_ids=${p.vids.slice(0, 50).join(",")}">▶ Play all on YouTube</a>` : "";
+  view.innerHTML = `<div class="pagehead"><div><div class="sub"><a href="#/playlists">Playlists</a> · by ${esc(p.by)}</div>
+      <h2>${esc(p.title)}</h2>${p.description ? `<p>${esc(p.description)}</p>` : ""}<div class="sub">${vids.length} video${vids.length === 1 ? "" : "s"}</div></div>
+      ${playAll}${own ? `<button class="pill" id="pledit">Edit</button><button class="pill danger" id="pldel">Delete</button>` : ""}</div>
+    ${vids.length ? vids.map((v, i) => `<div class="plrow"><span class="num">${i + 1}</span>${row(v)}${own ? `<button class="icon" data-rm="${v.vid}" title="Remove from playlist" aria-label="Remove">✕</button>` : "<span></span>"}</div>`).join("")
+      : `<div class="empty">This playlist is empty. Open a video and press Save to add it here.</div>`}`;
+  if (!own) return;
+  $("#pldel").onclick = async () => {
+    if (!confirm(`Delete “${p.title}”? This can't be undone.`)) return;
+    try { await api("playlists?id=" + p.id, { method: "DELETE" }); myPlaylists = null; location.hash = "#/playlists?mine=1"; } catch (e) { toast(e.message); }
+  };
+  $("#pledit").onclick = async () => {
+    const title = prompt("Playlist name", p.title); if (title === null) return;
+    const description = prompt("Description (optional)", p.description || ""); if (description === null) return;
+    try { await api("playlists", { method: "PATCH", body: { id: p.id, title, description } }); myPlaylists = null; playlist(id); } catch (e) { toast(e.message); }
+  };
+  view.querySelectorAll("[data-rm]").forEach((b) => b.onclick = async () => {
+    try { await api("playlists", { method: "PATCH", body: { id: p.id, remove: b.dataset.rm } }); myPlaylists = null; playlist(id); } catch (e) { toast(e.message); }
+  });
 }
 
 function search(q) {
   $("#q").value = q;
   const words = q.toLowerCase().split(/\s+/).filter(Boolean);
-  const scored = DATA.videos.map((v) => {
-    const title = v.title.toLowerCase(), meta = [v.channel, v.topic, ...v.tags].join(" ").toLowerCase(), body = (v.summary + " " + v.why).toLowerCase();
+  const scored = allVideos().map((v) => {
+    const title = v.title.toLowerCase(), m = [v.channel, v.topic, v.by, ...(v.tags || [])].join(" ").toLowerCase(), body = (v.summary + " " + (v.why || "")).toLowerCase();
     let s = 0;
-    for (const w of words) { const t = title.includes(w) * 5 + meta.includes(w) * 3 + body.includes(w); if (!t) return [0, v]; s += t; }
-    return [s + v.score / 100, v];
+    for (const w of words) { const t = title.includes(w) * 5 + m.includes(w) * 3 + body.includes(w); if (!t) return [0, v]; s += t; }
+    return [s + (v.score || v.votes || 0) / 100, v];
   }).filter(([s]) => s > 0).sort((a, b) => b[0] - a[0]).map(([, v]) => v);
-  view.innerHTML = `<div class="pagehead"><h2>Results for “${esc(q)}”</h2><p>${scored.length} video${scored.length === 1 ? "" : "s"}</p></div>
+  view.innerHTML = `<div class="pagehead"><div><h2>Results for “${esc(q)}”</h2><p>${scored.length} video${scored.length === 1 ? "" : "s"}</p></div></div>
     ${scored.length ? scored.slice(0, 100).map(row).join("") : `<div class="empty">No math videos match that. Try “calculus”, “primes” or “3Blue1Brown”.</div>`}`;
 }
 
 function saved(name, title, blurb) {
   const vids = lists[name].slice().reverse().map((x) => BY[x]).filter(Boolean);
-  view.innerHTML = `<div class="pagehead"><h2>${title}</h2><p>${blurb} Stored only in this browser.</p></div>${grid(vids)}`;
+  view.innerHTML = `<div class="pagehead"><div><h2>${title}</h2><p>${blurb} Stored only in this browser.</p></div></div>${grid(vids)}`;
 }
 
 function about() {
-  view.innerHTML = `<div class="about"><div class="pagehead"><h2>About MathTube</h2></div>
-    <p>MathTube is YouTube with only the math videos worth your time: the ones Hacker News commenters keep recommending to each other, year after year. No algorithm chasing watch time, no shorts, no accounts.</p>
-    <p>There are ${DATA.videos.length} videos right now. Each one shows why people recommended it, plus the actual Hacker News comments that pointed to it.</p>
-    <p>Likes, Watch later and History are kept in your browser (localStorage). Nothing is sent anywhere. Videos play through YouTube's privacy-enhanced embed.</p>
+  view.innerHTML = `<div class="about"><div class="pagehead"><div><h2>About MathTube</h2></div></div>
+    <p>MathTube is YouTube with only the math videos worth your time. It starts from the ${DATA.videos.length} math videos Hacker News commenters keep recommending to each other, year after year, and grows with videos shared and upvoted by the community. No algorithm chasing watch time, no shorts.</p>
+    <p>Sign in with GitHub to share videos, upvote them and build playlists. Likes, Watch later and History stay in your browser. Videos play through YouTube's privacy-enhanced embed.</p>
     <p><b>Credits.</b> Inspired by <a href="https://hackertube.org" target="_blank" rel="noopener">HackerTube</a> by Andrej Karpathy, and built from its open dataset
     (<a href="https://opendatacommons.org/licenses/by/1-0/" target="_blank" rel="noopener">ODC-By 1.0</a>), which is derived from the
     <a href="https://huggingface.co/datasets/open-index/hacker-news" target="_blank" rel="noopener">open-index/hacker-news</a> dataset.
@@ -284,38 +502,69 @@ function about() {
 
 // ---------- router ----------
 function route() {
-  const [path, query] = decodeURIComponent(location.hash.slice(1) || "/").split("?");
-  const sort = new URLSearchParams(query).get("sort") || "";
-  const [, page, arg] = path.split("/");
+  const [path, query] = location.hash.slice(1).split("?");
+  const params = new URLSearchParams(query);
+  const [, page, rawArg] = (path || "/").split("/");
+  const arg = decodeURIComponent(rawArg || "");
   document.querySelectorAll(".side a").forEach((a) => a.classList.toggle("on",
     a.getAttribute("href") === "#/" + (page === "c" ? "c/" + arg : page || "")));
   $("#side").classList.remove("open");
+  if (params.get("login") === "failed") toast("GitHub sign-in failed. Please try again.");
   if (page !== "watch") scrollTo(0, 0);
   if (page === "watch") watch(arg);
-  else if (page === "c") home(arg, sort);
-  else if (page === "search") search(arg || "");
+  else if (page === "c") home(arg, params.get("sort"));
+  else if (page === "search") search(arg);
+  else if (page === "new") community(params.get("sort"));
+  else if (page === "submit") submit();
+  else if (page === "playlists") playlists(params.get("mine"));
+  else if (page === "p") playlist(arg);
   else if (page === "liked") saved("liked", "Liked videos", "Videos you liked.");
   else if (page === "later") saved("later", "Watch later", "Videos you saved.");
   else if (page === "history") saved("history", "History", "Videos you opened.");
   else if (page === "about") about();
-  else home("", sort);
+  else home("", params.get("sort"));
   const v = page === "watch" && BY[arg];
   document.title = v ? `${v.title} - MathTube` : "MathTube";
+}
+
+function addCommunity(list) {
+  for (const raw of list) {
+    const v = { ...raw, community: true, level: "community" };
+    if (BY[v.vid] && !BY[v.vid].community) continue;   // already in the curated set
+    const i = COMM.findIndex((x) => x.vid === v.vid);
+    i >= 0 ? (COMM[i] = v) : COMM.push(v);
+    BY[v.vid] = v;
+  }
+}
+
+function renderAuth() {
+  document.querySelectorAll("[data-api]").forEach((a) => a.hidden = !API);
+  $("#submitBtn").hidden = !API;
+  $("#auth").innerHTML = !API ? "" : ME
+    ? `<a href="/api/auth/logout" title="Signed in as ${esc(ME.login)}. Click to sign out."><img class="avatar" alt="${esc(ME.login)}" src="${esc(ME.avatar)}"></a>`
+    : `<a class="pill" href="/api/auth/login"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02a9.58 9.58 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.75c0 .27.18.58.69.48A10 10 0 0 0 12 2z"/></svg><span class="label">Sign in</span></a>`;
 }
 
 $("#search").onsubmit = (e) => { e.preventDefault(); const q = $("#q").value.trim(); location.hash = q ? "#/search/" + encodeURIComponent(q) : "#/"; };
 addEventListener("keydown", (e) => {
   if (e.key === "/" && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)) { e.preventDefault(); $("#q").focus(); }
-  if (e.key === "Escape") document.activeElement.blur();
+  if (e.key === "Escape") { document.activeElement.blur(); document.querySelector(".menu")?.remove(); }
 });
 addEventListener("hashchange", route);
 
-fetch("data/videos.json").then((r) => r.json()).then((d) => {
-  DATA = d;
-  for (const v of d.videos) BY[v.vid] = v;
-  $("#topics").innerHTML = Object.entries(d.categories).map(([id, name]) => `<a href="#/c/${id}">${esc(name)}</a>`).join("");
+(async () => {
+  try {
+    DATA = await fetch("data/videos.json").then((r) => r.json());
+  } catch { view.innerHTML = `<div class="empty">Could not load videos. Please refresh.</div>`; return; }
+  for (const v of DATA.videos) BY[v.vid] = v;
+  $("#topics").innerHTML = Object.entries(DATA.categories).map(([id, name]) => `<a href="#/c/${id}">${esc(name)}</a>`).join("");
+  // the community layer is optional: if the API is missing or down, the curated site still works
+  const [me, comm] = await Promise.allSettled([api("me"), api("videos")]);
+  if (me.status === "fulfilled") { API = true; ME = me.value.user; VOTED = new Set(me.value.voted); }
+  if (comm.status === "fulfilled") addCommunity(comm.value);
+  renderAuth();
   route();
-}).catch(() => { view.innerHTML = `<div class="empty">Could not load videos. Please refresh.</div>`; });
+})();
 </script>
 </body>
 </html>
