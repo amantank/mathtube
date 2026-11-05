@@ -3,11 +3,25 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MathTube</title>
-<meta name="description" content="The best math videos on YouTube, recommended by Hacker News and the MathTube community.">
-<meta property="og:title" content="MathTube">
-<meta property="og:description" content="The best math videos on YouTube, recommended by Hacker News and the MathTube community.">
+<title>MathTube: the best math videos, learning paths and resources</title>
+<meta name="description" content="Free, hand-picked math videos from YouTube, beginner learning paths for linear algebra, calculus and probability, and a library of the best math websites, courses and GitHub repos.">
+<link rel="canonical" href="https://mathtube.in/">
+<meta name="theme-color" content="#4f46e5">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MathTube">
+<meta property="og:title" content="MathTube: the best math videos, learning paths and resources">
+<meta property="og:description" content="Free, hand-picked math videos from YouTube, beginner learning paths for linear algebra, calculus and probability, and a library of the best math websites, courses and GitHub repos.">
 <meta property="og:url" content="https://mathtube.in/">
+<meta property="og:image" content="https://mathtube.in/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MathTube: the best math videos, learning paths and resources">
+<meta name="twitter:description" content="Free, hand-picked math videos from YouTube, beginner learning paths for linear algebra, calculus and probability, and a library of the best math websites, courses and GitHub repos.">
+<meta name="twitter:image" content="https://mathtube.in/og.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","name":"MathTube","alternateName":"mathtube.in","url":"https://mathtube.in/","description":"Free, hand-picked math videos from YouTube, beginner learning paths for linear algebra, calculus and probability, and a library of the best math websites, courses and GitHub repos.","inLanguage":"en"}
+</script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234f46e5'/%3E%3Ctext x='16' y='24' text-anchor='middle' font-family='Georgia,serif' font-weight='700' font-size='24' fill='white'%3E%CF%80%3C/text%3E%3C/svg%3E">
 <style>
   :root {
@@ -234,6 +248,7 @@ const store = {
 // Community features (GitHub sign-in, sharing, upvotes, account playlists) are switched off for now;
 // the API in /api still works, set this to true to bring them back.
 const COMMUNITY = false;
+const SITE_TITLE = document.title;
 const DONATE_URL = "";   // e.g. a Razorpay / Buy Me a Coffee / UPI payment link; the Donate buttons stay hidden while empty
 let DATA, BY = {}, COMM = [], PATHS = [], LIB = null;
 let API = false, ME = null, VOTED = new Set();   // API is false when the site runs without the backend (plain static hosting)
@@ -640,7 +655,7 @@ function route() {
   else if (page === "about") about();
   else home("", params.get("sort"));
   const v = page === "watch" && BY[arg];
-  document.title = v ? `${v.title} - MathTube` : "MathTube";
+  document.title = v ? `${v.title} - MathTube` : SITE_TITLE;
 }
 
 function addCommunity(list) {
