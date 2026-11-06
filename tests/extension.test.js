@@ -26,3 +26,21 @@ test("extension hides everything else", () => {
     "Messi vs Ronaldo – Who is better? Sponsored",
   ]) assert.ok(!ctx.isMath(t), t);
 });
+
+test("on-device model tells math from the rest and follows the chosen topic", async () => {
+  const { pipeline, env } = await import("@huggingface/transformers");
+  const { classifier } = await import("../extension/classifier.js");
+  env.allowRemoteModels = false;   // use the exact files shipped in the extension
+  env.localModelPath = new URL("../extension/models/", import.meta.url).pathname.replace(/^\/(\w:)/, "$1");
+  const extractor = await pipeline("feature-extraction", "Xenova/all-MiniLM-L6-v2", { dtype: "q8" });
+  const classify = classifier(async (t) => (await extractor(t, { pooling: "mean", normalize: true })).tolist());
+
+  const math = ["Topology of a coffee cup", "How big is a googolplex?", "Monty Hall problem explained", "The Collatz Conjecture"];
+  const other = ["GTA 6 Trailer 2", "Learn React in 1 hour", "Lo-fi beats to study to", "How quantum computers work"];
+  const out = await classify([...math, ...other]);
+  assert.deepEqual(out.map((o) => o.math), [...math.map(() => true), ...other.map(() => false)]);
+  assert.equal(out[0].match, null);
+
+  const topic = await classify(["Eigenvectors and eigenvalues", "Calculus 1 Lecture 1"], "linear algebra for beginners");
+  assert.deepEqual(topic.map((o) => o.match), [true, false]);
+});

@@ -1,5 +1,5 @@
 // MathTube mode: hides every YouTube video tile that isn't about math, plus Shorts and feed shelves.
-// Each video is first judged by keywords (instant), then by the Jev AI classifier via mathtube.in when it answers.
+// Each video is first judged by keywords (instant), then by the small on-device classifier model when it answers.
 const TILES = [
   "ytd-rich-item-renderer", "ytd-video-renderer", "ytd-compact-video-renderer", "ytd-grid-video-renderer",
   "ytd-playlist-renderer", "ytd-compact-playlist-renderer", "ytd-radio-renderer", "ytd-compact-radio-renderer",
@@ -28,7 +28,8 @@ function keep(el) {
   const text = el.textContent;   // not innerText: that is empty once the tile is hidden, so it would never come back
   const vid = vidOf(el);
   const v = vid && verdicts.get(vid);
-  if (v) return v.math >= 0.5 && (v.match == null || v.match >= 0.5);
+  // keywords and known math channels are precise, so they count as math even if the model disagrees
+  if (v) return (v.math || isMath(text)) && v.match !== false;
   if (vid && on && !aiDown && !asked.has(vid)) {
     asked.add(vid);
     queue.set(vid, text.replace(/\s+/g, " ").trim().slice(0, 300));
@@ -51,8 +52,8 @@ function flush() {
   const askedWant = want;
   const done = (r) => {
     flushing = false;
-    if (!r || (r.error && r.error !== 400)) aiDown = true;   // no key, limit hit or offline: keywords for this page
-    else if (!r.error && askedWant === want) for (const [vid, v] of Object.entries(r.results)) verdicts.set(vid, v);
+    if (!r || r.error) aiDown = true;   // model failed to load: stay on keywords for this page
+    else if (askedWant === want) for (const [vid, v] of Object.entries(r.results)) verdicts.set(vid, v);
     if (queue.size && !aiDown) flushSoon();
     pass();
   };

@@ -95,32 +95,3 @@ test("cross-site writes are refused", async () => {
   assert.equal(code, 403);
 });
 
-test("classify asks Jev once per title, caches, and degrades without a key", async () => {
-  const { default: classify } = await import("../api/classify.js");
-  const body = { want: "Linear algebra", items: [{ vid: "fNk_zzaMoSs", text: "Vectors | Essence of linear algebra 3Blue1Brown" },
-    { vid: "dQw4w9WgXcQ", text: "Rick Astley - Never Gonna Give You Up" }, { vid: "bad", text: "x" }] };
-  delete process.env.TYPESAFE_API_KEY;
-  assert.equal((await call(classify, { method: "POST", body })).statusCode, 503);
-
-  process.env.TYPESAFE_API_KEY = "test";
-  const realFetch = globalThis.fetch;
-  const sent = [];
-  globalThis.fetch = async (url, opts) => {
-    const b = JSON.parse(opts.body);
-    sent.push(b);
-    const yes = /linear algebra/i.test(b.state) ? 0.97 : 0.02;
-    return { ok: true, json: async () => ({ answers: { math: { noul: yes }, match: { noul: yes } } }) };
-  };
-  try {
-    const r = await call(classify, { method: "POST", body });
-    assert.equal(r.statusCode, 200);
-    assert.deepEqual(r.data.results, { fNk_zzaMoSs: { math: 0.97, match: 0.97 }, dQw4w9WgXcQ: { math: 0.02, match: 0.02 } });
-    assert.equal(sent.length, 2, "invalid video id is skipped");
-    assert.match(sent[0].questions.match.instructions, /linear algebra/);
-    await call(classify, { method: "POST", body });
-    assert.equal(sent.length, 2, "second call is served from the cache");
-    // same video id with a different title is a different cache entry, so nobody can poison a verdict
-    await call(classify, { method: "POST", body: { want: "linear algebra", items: [{ vid: "fNk_zzaMoSs", text: "fake" }] } });
-    assert.equal(sent.length, 3);
-  } finally { globalThis.fetch = realFetch; delete process.env.TYPESAFE_API_KEY; }
-});

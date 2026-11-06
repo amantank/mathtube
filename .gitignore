@@ -5,3 +5,7 @@ node_modules/
 .claude/
 
 .vercel
+extension/lib/*.js
+extension/lib/*.mjs
+extension/lib/*.wasm
+extension/models/

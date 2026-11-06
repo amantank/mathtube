@@ -21,7 +21,6 @@ It starts from the math videos Hacker News keeps recommending (from [HackerTube]
   - `videos` — list / share community videos (checked against YouTube oEmbed)
   - `vote` — toggle an upvote
   - `playlists` — create, list, edit, delete playlists
-  - `classify` — asks TypeSafe's Jev classifier whether YouTube videos are math (used by the extension), cached in MongoDB
 
 If the API is unreachable, the curated site still works on its own.
 Community features (sign-in, sharing, playlists) are switched off by `COMMUNITY = false` in `index.html`.
@@ -42,11 +41,12 @@ Donate buttons appear once `DONATE_URL` in `index.html` is set.
 ## Browser extension
 
 `extension/` turns youtube.com into MathTube: it hides every non-math video, Shorts and feed shelves.
-Each video is judged by keywords instantly, then by the Jev AI classifier through `/api/classify`
-(needs `TYPESAFE_API_KEY` in Vercel; without it the extension stays on keywords). In the popup the user can
-also type a topic ("linear algebra for beginners") to see only that.
+Each video is judged by keywords instantly, then by a small AI model (all-MiniLM-L6-v2, run with
+Transformers.js) that ships inside the extension and runs on the user's computer, so nothing leaves the browser.
+In the popup the user can also type a topic ("linear algebra for beginners") to see only that.
+The model and runtime files aren't committed: `npm install && npm run build:extension` copies them from `node_modules` and downloads the model (see `extension/lib/NOTICE.md`).
 
-Try it: open `chrome://extensions`, turn on Developer mode, click **Load unpacked**, pick the `extension` folder.
+Try it: run `npm run build:extension`, open `chrome://extensions`, turn on Developer mode, click **Load unpacked**, pick the `extension` folder.
 
 ## Test
 
