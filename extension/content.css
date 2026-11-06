@@ -1,0 +1,12 @@
+html.mathtube-on .mathtube-hide { display: none !important; }
+#mathtube-banner { display: none; }
+html.mathtube-on #mathtube-banner {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 16px 0;
+  padding: 12px 16px; border-radius: 12px; font: 14px/1.4 Roboto, Arial, sans-serif;
+  background: var(--yt-spec-badge-chip-background, #f2f2f2); color: var(--yt-spec-text-primary, #0f0f0f);
+}
+#mathtube-banner b { margin-right: 4px; }
+#mathtube-banner a {
+  padding: 4px 12px; border-radius: 999px; text-decoration: none; color: inherit;
+  background: var(--yt-spec-10-percent-layer, rgba(0,0,0,.1));
+}

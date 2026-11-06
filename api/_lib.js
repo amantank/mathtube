@@ -21,6 +21,7 @@ export function db() {
       d.collection("videos").createIndex({ votes: -1 }),
       d.collection("playlists").createIndex({ owner: 1 }),
       d.collection("playlists").createIndex({ updatedAt: -1 }),
+      d.collection("jev_rate").createIndex({ at: 1 }, { expireAfterSeconds: 2 * 86400 }),
     ]);
     return d;
   })().catch((e) => { dbPromise = undefined; throw e; });

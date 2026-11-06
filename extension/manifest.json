@@ -1,0 +1,43 @@
+{
+  "manifest_version": 3,
+  "name": "MathTube: only math on YouTube",
+  "version": "1.1.0",
+  "description": "Turns YouTube into MathTube: an AI classifier hides everything except math, or just the math topic you pick.",
+  "permissions": [
+    "storage"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.youtube.com/*"
+      ],
+      "js": [
+        "match.js",
+        "content.js"
+      ],
+      "css": [
+        "content.css"
+      ],
+      "run_at": "document_start"
+    }
+  ],
+  "host_permissions": [
+    "https://mathtube.in/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
+}
